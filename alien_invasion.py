@@ -8,6 +8,9 @@ def run_game():
     screen = pygame.display.set_mode((1200, 800))
     pygame.display.set_caption('Alien Invasion')
 
+    # 设置背景色 因为背景色仅需指定一次 即不随事件变化而变化 所以在while循环外边设置、
+    bg_color = (230, 230, 230)
+
     # 开始游戏主循环
     while True:
         # 监听键盘和鼠标事件
@@ -15,8 +18,11 @@ def run_game():
             if event.type == pygame.QUIT:
                 sys.exit()
 
+        # 每次循环时都重绘屏幕
+        screen.fill(bg_color)
+
         # 让最近绘制的屏幕可见
-                pygame.display.flip()
+        pygame.display.flip()
 
 run_game()
 

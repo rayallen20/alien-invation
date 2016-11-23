@@ -1,8 +1,8 @@
-import sys
 import pygame
 
 from settings import Settings
 from ship import Ship
+import game_functions as gf
 
 
 def run_game():
@@ -20,18 +20,11 @@ def run_game():
     # 开始游戏主循环
     while True:
 
-        # 监听键盘鼠标事件
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        # 此处 为避免主循环太过冗长 将有关监听事件的方法 都放在了game_functions这个模块中
+        # 因此 不再需要在这个文件中import sys 因为只在game_functions中使用了这个模块 本文件中没有使用
+        gf.check_events()
 
-        # 每次循环时都重绘屏幕
-        # ship.blitme() 一定要在主屏幕绘制后再绘制 否则表示飞船的surface对象 会被主屏幕的srcface对象遮挡 就看不到飞船了
-        # 屏幕的遮挡 类似于 美术的 互相遮挡概念 即最上层的surface对象 要最后被绘制 有点类似内存中堆栈的概念
-        screen.fill(ai_settings.bg_color)
-        ship.blitme()
-
-        # 使最后一次绘制的屏幕可见
-        pygame.display.flip()
+        # 此处 重构理由同上
+        gf.update_screen(ai_settings, screen, ship)
 
 run_game()

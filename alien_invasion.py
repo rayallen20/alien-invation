@@ -22,7 +22,7 @@ def run_game():
 
         # 此处 为避免主循环太过冗长 将有关监听事件的方法 都放在了game_functions这个模块中
         # 因此 不再需要在这个文件中import sys 因为只在game_functions中使用了这个模块 本文件中没有使用
-        gf.check_events()
+        gf.check_events(ship)
 
         # 此处 重构理由同上
         gf.update_screen(ai_settings, screen, ship)

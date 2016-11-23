@@ -17,11 +17,18 @@ class Ship:
 
         # 向右移动flag
         self.moving_right = False
+        # 向左移动flag
+        self.moving_left = False
 
     def update(self):
         """根据flag 调整飞船位置"""
+        # 持续向右移动
         if self.moving_right:
+            # 左右移动最小单位为1个像素?
             self.rect.centerx += 1
+        # 持续向左移动
+        if self.moving_left:
+            self.rect.centerx -= 1
 
     def blitme(self):
         """在指定位置绘制飞船"""

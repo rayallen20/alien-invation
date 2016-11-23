@@ -19,6 +19,10 @@ def check_events(ship):
             if event.key == pygame.K_RIGHT:
                 # 设置向右移动flag 为True
                 ship.moving_right = True
+                # 检查是否为键盘←被按下了
+            elif event.key == pygame.K_LEFT:
+                # 设置向左移动flag 为True
+                ship.moving_left = True
 
         # 检查是否为抬起键盘事件
         elif event.type == pygame.KEYUP:
@@ -26,6 +30,10 @@ def check_events(ship):
             if event.key == pygame.K_RIGHT:
                 # 设置向右移动flag 为False
                 ship.moving_right = False
+            # 检查是否为键盘←被抬起了
+            elif event.key == pygame.K_LEFT:
+                # 设置向左移动flag 为False
+                ship.moving_left = False
 
 
 def update_screen(ai_settings, screen, ship):

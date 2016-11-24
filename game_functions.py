@@ -3,6 +3,20 @@ import sys
 import pygame
 
 
+def check_keydown_events(event, ship):
+    if event.key == pygame.K_RIGHT:
+        ship.moving_right = True
+    elif event.key == pygame.K_LEFT:
+        ship.moving_left = True
+
+
+def check_keyup_events(event, ship):
+    if event.key == pygame.K_RIGHT:
+        ship.moving_right = False
+    elif event.key == pygame.K_LEFT:
+        ship.moving_left = False
+
+
 def check_events(ship):
     """
     :param ship: 飞船对象
@@ -15,25 +29,11 @@ def check_events(ship):
 
         # 检查是否为按下键盘事件
         elif event.type == pygame.KEYDOWN:
-            # 检查是否为键盘→键被按下了
-            if event.key == pygame.K_RIGHT:
-                # 设置向右移动flag 为True
-                ship.moving_right = True
-                # 检查是否为键盘←被按下了
-            elif event.key == pygame.K_LEFT:
-                # 设置向左移动flag 为True
-                ship.moving_left = True
+            check_keydown_events(event, ship)
 
         # 检查是否为抬起键盘事件
         elif event.type == pygame.KEYUP:
-            # 检查是否为键盘→被抬起了
-            if event.key == pygame.K_RIGHT:
-                # 设置向右移动flag 为False
-                ship.moving_right = False
-            # 检查是否为键盘←被抬起了
-            elif event.key == pygame.K_LEFT:
-                # 设置向左移动flag 为False
-                ship.moving_left = False
+            check_keyup_events(event, ship)
 
 
 def update_screen(ai_settings, screen, ship):
@@ -63,4 +63,8 @@ def update_screen(ai_settings, screen, ship):
 此时 有几个问题
 1.只有按一下→ 飞船才会向右移动 按住→ 没有反应
 2.如果一直按→ 则飞船会移出屏幕
+"""
+
+"""
+重构check_events() 将监听按下按键和松开按键两部分代码写成2个函数
 """

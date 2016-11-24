@@ -2,9 +2,10 @@ import pygame
 
 
 class Ship:
-    def __init__(self, screen):
+    def __init__(self, ai_settings, screen):
         """初始化飞船并设置其初始位置"""
         self.screen = screen
+        self.ai_settings = ai_settings
 
         # 加载飞船图像并获取其外接矩形
         self.image = pygame.image.load('images/ship.bmp')
@@ -14,6 +15,9 @@ class Ship:
         # 将每艘新飞船放在屏幕底部中央
         self.rect.centerx = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom
+
+        # 在飞船的属性center中存储小数值
+        self.center = float(self.rect.centerx)
 
         # 向右移动flag
         self.moving_right = False
@@ -25,10 +29,15 @@ class Ship:
         # 持续向右移动
         if self.moving_right:
             # 左右移动最小单位为1个像素?
-            self.rect.centerx += 1
+            # self.rect.centerx += 1
+            # 更新飞船的center值 而不更新rect
+            self.center += self.ai_settings.ship_speed_factor
         # 持续向左移动
         if self.moving_left:
-            self.rect.centerx -= 1
+            self.center -= self.ai_settings.ship_speed_factor
+
+        # 根据self.center来更新rect对象
+        self.rect.centerx = self.center
 
     def blitme(self):
         """在指定位置绘制飞船"""
@@ -53,4 +62,9 @@ pygame中 以左上角为原点 水平向右为x轴正方向 垂直向下为y轴
 self.rect.centerx = self.screen_rect.centerx 将飞船的中心点的x坐标 设置为 屏幕中心点的x坐标
 self.rect.bottom = self.screen_rect.bottom 将飞船下边缘的y坐标 设置为 屏幕下边缘的y坐标
 blitme()方法中  screen.blit(要绘制的图像surface, 背景surface) 即根据__init__中的rect的位置 在screen上绘制图像
+"""
+"""
+centerx:只接受整数数值 如果需要小数数值 则按上述代码修改
+self.rect.centerx 是一个int 所以拿它去 += -= 一个float 就会出现 只接受整数部分并进行计算的情况
+所以此处的解决办法是 用self.center = float(self.rect.centerx)  使代表位置的那个值 能进行浮点数运算 然后 再将这个运算后的值 赋给 self.rect.centerx
 """

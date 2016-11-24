@@ -27,13 +27,13 @@ class Ship:
     def update(self):
         """根据flag 调整飞船位置"""
         # 持续向右移动
-        if self.moving_right:
+        if self.moving_right and self.rect.right < self.screen_rect.right:
             # 左右移动最小单位为1个像素?
             # self.rect.centerx += 1
             # 更新飞船的center值 而不更新rect
             self.center += self.ai_settings.ship_speed_factor
         # 持续向左移动
-        if self.moving_left:
+        if self.moving_left and self.rect.left > 0:
             self.center -= self.ai_settings.ship_speed_factor
 
         # 根据self.center来更新rect对象
@@ -62,9 +62,17 @@ pygame中 以左上角为原点 水平向右为x轴正方向 垂直向下为y轴
 self.rect.centerx = self.screen_rect.centerx 将飞船的中心点的x坐标 设置为 屏幕中心点的x坐标
 self.rect.bottom = self.screen_rect.bottom 将飞船下边缘的y坐标 设置为 屏幕下边缘的y坐标
 blitme()方法中  screen.blit(要绘制的图像surface, 背景surface) 即根据__init__中的rect的位置 在screen上绘制图像
+
+
 """
 """
 centerx:只接受整数数值 如果需要小数数值 则按上述代码修改
 self.rect.centerx 是一个int 所以拿它去 += -= 一个float 就会出现 只接受整数部分并进行计算的情况
 所以此处的解决办法是 用self.center = float(self.rect.centerx)  使代表位置的那个值 能进行浮点数运算 然后 再将这个运算后的值 赋给 self.rect.centerx
+"""
+
+
+"""
+检测ship.rect.right时  因为不知道屏幕有多宽 所以需要用ship.rect.right < ship.screen_rect.right 作为判断条件
+但是 检测ship.rect.left时 因为屏幕左侧一定是从0开始计算 所以 只需要比较 ship.rect.left > 0 即可
 """

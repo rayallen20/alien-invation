@@ -10,9 +10,7 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
     elif event.key == pygame.K_z:
-        # 创建一颗子弹 并将其加入到主循环的bullets Group中
-        new_bullet = Bullet(ai_settings, screen, ship)
-        bullets.add(new_bullet)
+        fire_bullet(ai_settings, screen, ship, bullets)
 
 
 def check_keyup_events(event, ship):
@@ -63,6 +61,24 @@ def update_screen(ai_settings, screen, ship, bullets):
 
     # 刷新屏幕
     pygame.display.flip()
+
+
+def update_bullets(bullets):
+    """更新子弹的位置 并删除已消失的子弹"""
+    # 更新子弹位置
+    bullets.update()
+
+    # 删除已消失的子弹
+    for bullet in bullets.copy():
+        if bullet.rect.bottom <= 0:
+            bullets.remove(bullet)
+
+
+def fire_bullet(ai_settings, screen, ship, bullets):
+    """如果还没有达到限制数,就发射一颗子弹"""
+    if len(bullets) < ai_settings.bullet_allowed:
+        bullet = Bullet(ai_settings, screen, ship)
+        bullets.add(bullet)
 
 """
 对"事件"的解读:

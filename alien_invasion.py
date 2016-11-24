@@ -32,7 +32,9 @@ def run_game():
         ship.update()
 
         # 同ship.update() 主循环中调用update方法 更新位置 但是 这是对所有Bullet对象都生效的
-        bullets.update()
+        # 当子弹超过屏幕上方时 删除这个surface
+        gf.update_bullets(bullets)
+        # print(len(bullets))
 
         # 此处 重构理由同上
         gf.update_screen(ai_settings, screen, ship, bullets)

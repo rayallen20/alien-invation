@@ -1,13 +1,18 @@
 # 本模块用于处理让游戏运行起来的方法 目的在于避免主循环中的代码太长
 import sys
 import pygame
+from bullet import Bullet
 
 
-def check_keydown_events(event, ship):
+def check_keydown_events(event, ai_settings, screen, ship, bullets):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
+    elif event.key == pygame.K_z:
+        # 创建一颗子弹 并将其加入到主循环的bullets Group中
+        new_bullet = Bullet(ai_settings, screen, ship)
+        bullets.add(new_bullet)
 
 
 def check_keyup_events(event, ship):
@@ -17,9 +22,12 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ship):
+def check_events(ai_settings, screen, ship, bullets):
     """
+    :param ai_settings 设置类
+    :param screen 屏幕surface
     :param ship: 飞船对象
+    :param bullets: 子弹类的Group
     检查事件是否为退出
     :return:
     """
@@ -29,24 +37,29 @@ def check_events(ship):
 
         # 检查是否为按下键盘事件
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ship)
+            check_keydown_events(event, ai_settings, screen, ship, bullets)
 
         # 检查是否为抬起键盘事件
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship):
+def update_screen(ai_settings, screen, ship, bullets):
     """
     主循环时 重绘 刷新屏幕
     :param ai_settings: 设置类的对象
     :param screen: pygame.display.set_mode 屏幕
     :param ship: 飞船类的实例化对象
+    :param bullets: 子弹类的Group
     :return:
     """
     # 每次循环时都重新绘制屏幕
     screen.fill(ai_settings.bg_color)
     ship.blitme()
+
+    # 在飞船和外星人后边重绘所有子弹
+    for bullet in bullets.sprites():
+        bullet.draw_bullet()
 
     # 刷新屏幕
     pygame.display.flip()
@@ -67,4 +80,11 @@ def update_screen(ai_settings, screen, ship):
 
 """
 重构check_events() 将监听按下按键和松开按键两部分代码写成2个函数
+"""
+
+"""
+因加入子弹元素 而对check_keydown_events()函数做出修改 解读如下
+bullets 即 主循环中 子弹类的编组 这个编组 可以当做一个list来使用
+对新增的创建子弹对象的说明:
+如果按下的是z键 就创建一个子弹对象
 """

@@ -90,6 +90,40 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         bullets.add(bullet)
 
 
+def get_numbers_alien_x(ai_settings, alien_width):
+    """
+    计算每行可容纳多少个外星人
+    :param ai_settings: 设置类
+    :param alien_width: 外星人宽度
+    :return: int number_aliens_x: 每行可容纳的外星人的数量
+    """
+    # 可以用来显示外星人的宽度 (因为外星人的左边和右边 都有间距 所以 - 2 * alien_width)
+    available_space_x = ai_settings.screen_width - (2 * alien_width)
+    # 一行中可显示的外星人的数量 = 可用空间 / (外星人宽度 + 间距) 因为 外星人宽度 = 间距 所以 2 * alien_width
+    numbers_aliens_x = int(available_space_x / (2 * alien_width))
+    return numbers_aliens_x
+
+
+def create_alien(ai_settings, screen, aliens, alien_number):
+    """
+    创建一个外星人 并放在当前行
+    :param ai_settings: 设置类
+    :param screen: 屏幕surface对象
+    :param aliens: 外星人Group
+    :param alien_number: 每行能显示的外星人数量
+    :return:
+    """
+    # 外星人的x轴间距为外星人图片宽度
+    alien = Alien(ai_settings, screen)
+    # 外星人宽度
+    alien_width = alien.rect.width
+    # 外星人x坐标 = 左边距 + (外星人surface对象宽度 + 间距) * 外星人数量
+    alien.x = alien_width + 2 * alien_width * alien_number
+    # 设置每一个外星人 距左侧的位置
+    alien.rect.x = alien.x
+    aliens.add(alien)
+
+
 def create_fleet(ai_settings, screen, aliens):
     """
     创建外星人群
@@ -101,22 +135,11 @@ def create_fleet(ai_settings, screen, aliens):
     # 创建一个外星人 并计算一行可容纳多少个外星人
     # 外星人的x轴间距为外星人图片宽度
     alien = Alien(ai_settings, screen)
-    # 外星人宽度
-    alien_width = alien.rect.width
-    # 可以用来显示外星人的宽度 (因为外星人的左边和右边 都有间距 所以 - 2 * alien_width)
-    available_space_x = ai_settings.screen_width - (2 * alien_width)
-    # 一行中可显示的外星人的数量 = 可用空间 / (外星人宽度 + 间距) 因为 外星人宽度 = 间距 所以 2 * alien_width
-    numbers_aliens_x = int(available_space_x / (2 * alien_width))
+    numbers_aliens_x = get_numbers_alien_x(ai_settings, alien.rect.width)
 
     # 创建第一行外星人
     for alien_number in range(numbers_aliens_x):
-        # 创建一个外星人 并加入当前行
-        alien = Alien(ai_settings, screen)
-        # 外星人x坐标 = 左边距 + (外星人surface对象宽度 + 间距) * 外星人数量
-        alien.x = alien_width + 2 * alien_width * alien_number
-        # 设置每一个外星人 距左侧的位置
-        alien.rect.x = alien.x
-        aliens.add(alien)
+        create_alien(ai_settings, screen, aliens, alien_number)
 
 """
 对"事件"的解读:

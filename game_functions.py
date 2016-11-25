@@ -55,7 +55,7 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     :param ai_settings: 设置类的对象
     :param screen: pygame.display.set_mode 屏幕
     :param ship: 飞船类的实例化对象
-    :param alien: 外星人类的实例化对象
+    :param aliens: 外星人Group
     :param bullets: 子弹类的Group
     :return:
     """

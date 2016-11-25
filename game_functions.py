@@ -2,6 +2,7 @@
 import sys
 import pygame
 from bullet import Bullet
+from alien import Alien
 
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
@@ -48,7 +49,7 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, alien, bullets):
+def update_screen(ai_settings, screen, ship, aliens, bullets):
     """
     主循环时 重绘 刷新屏幕
     :param ai_settings: 设置类的对象
@@ -61,7 +62,7 @@ def update_screen(ai_settings, screen, ship, alien, bullets):
     # 每次循环时都重新绘制屏幕
     screen.fill(ai_settings.bg_color)
     ship.blitme()
-    alien.blitme()
+    aliens.draw(screen)
 
     # 在飞船和外星人后边重绘所有子弹
     for bullet in bullets.sprites():
@@ -88,6 +89,35 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         bullet = Bullet(ai_settings, screen, ship)
         bullets.add(bullet)
 
+
+def create_fleet(ai_settings, screen, aliens):
+    """
+    创建外星人群
+    :param ai_settings: 设置类
+    :param screen: 屏幕的surface对象
+    :param aliens: 外星人的Group类
+    :return:
+    """
+    # 创建一个外星人 并计算一行可容纳多少个外星人
+    # 外星人的x轴间距为外星人图片宽度
+    alien = Alien(ai_settings, screen)
+    # 外星人宽度
+    alien_width = alien.rect.width
+    # 可以用来显示外星人的宽度 (因为外星人的左边和右边 都有间距 所以 - 2 * alien_width)
+    available_space_x = ai_settings.screen_width - (2 * alien_width)
+    # 一行中可显示的外星人的数量 = 可用空间 / (外星人宽度 + 间距) 因为 外星人宽度 = 间距 所以 2 * alien_width
+    numbers_aliens_x = int(available_space_x / (2 * alien_width))
+
+    # 创建第一行外星人
+    for alien_number in range(numbers_aliens_x):
+        # 创建一个外星人 并加入当前行
+        alien = Alien(ai_settings, screen)
+        # 外星人x坐标 = 左边距 + (外星人surface对象宽度 + 间距) * 外星人数量
+        alien.x = alien_width + 2 * alien_width * alien_number
+        # 设置每一个外星人 距左侧的位置
+        alien.rect.x = alien.x
+        aliens.add(alien)
+
 """
 对"事件"的解读:
 每当用户按键或者点击鼠标时 都将在Pygame中注册一个事件
@@ -111,4 +141,8 @@ def fire_bullet(ai_settings, screen, ship, bullets):
 bullets 即 主循环中 子弹类的编组 这个编组 可以当做一个list来使用
 对新增的创建子弹对象的说明:
 如果按下的是z键 就创建一个子弹对象
+"""
+
+"""
+aliens.draw(screen): Group.draw() 绘制编组中的每个元素 元素的位置由rect属性决定
 """

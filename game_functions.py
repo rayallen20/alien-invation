@@ -5,12 +5,18 @@ from bullet import Bullet
 
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
+    # 按→向右移动飞船
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
+    # 按←向左移动飞船
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
+    # 按z键创建并发射一颗子弹
     elif event.key == pygame.K_z:
         fire_bullet(ai_settings, screen, ship, bullets)
+    # 按q键退出
+    elif event.key == pygame.K_q:
+        sys.exit()
 
 
 def check_keyup_events(event, ship):
@@ -42,18 +48,20 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, bullets):
+def update_screen(ai_settings, screen, ship, alien, bullets):
     """
     主循环时 重绘 刷新屏幕
     :param ai_settings: 设置类的对象
     :param screen: pygame.display.set_mode 屏幕
     :param ship: 飞船类的实例化对象
+    :param alien: 外星人类的实例化对象
     :param bullets: 子弹类的Group
     :return:
     """
     # 每次循环时都重新绘制屏幕
     screen.fill(ai_settings.bg_color)
     ship.blitme()
+    alien.blitme()
 
     # 在飞船和外星人后边重绘所有子弹
     for bullet in bullets.sprites():

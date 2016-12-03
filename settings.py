@@ -16,4 +16,4 @@ class Settings:
         self.bullet_color = (60, 60, 60)
         # 允许出现在屏幕中的子弹数量
         # 此处 我做过测试 手速最快也只能同屏幕有5颗子弹 所以设置为10颗应该是看不出来的
-        self.bullet_allowed = 10
+        self.bullet_allowed = 50

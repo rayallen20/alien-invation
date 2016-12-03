@@ -104,13 +104,14 @@ def get_numbers_alien_x(ai_settings, alien_width):
     return numbers_aliens_x
 
 
-def create_alien(ai_settings, screen, aliens, alien_number):
+def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     """
     创建一个外星人 并放在当前行
     :param ai_settings: 设置类
     :param screen: 屏幕surface对象
     :param aliens: 外星人Group
     :param alien_number: 每行能显示的外星人数量
+    :param row_number: 共应显示多少列外星人
     :return:
     """
     # 外星人的x轴间距为外星人图片宽度
@@ -121,25 +122,56 @@ def create_alien(ai_settings, screen, aliens, alien_number):
     alien.x = alien_width + 2 * alien_width * alien_number
     # 设置每一个外星人 距左侧的位置
     alien.rect.x = alien.x
+    # 外星人y坐标 = 外星人群距上侧高度(即外星人高度) + (外星人高度 + 行间距) * 所在行数
+    alien.y = alien.rect.height + alien.rect.height * 2 * row_number
+    # 设置每一个外星人 距上侧的位置
+    alien.rect.y = alien.y
     aliens.add(alien)
 
 
-def create_fleet(ai_settings, screen, aliens):
+def create_fleet(ai_settings, screen, ship, aliens):
     """
     创建外星人群
     :param ai_settings: 设置类
     :param screen: 屏幕的surface对象
+    :param ship: 飞船类
     :param aliens: 外星人的Group类
     :return:
     """
     # 创建一个外星人 并计算一行可容纳多少个外星人
     # 外星人的x轴间距为外星人图片宽度
     alien = Alien(ai_settings, screen)
-    numbers_aliens_x = get_numbers_alien_x(ai_settings, alien.rect.width)
+    number_aliens_x = get_numbers_alien_x(ai_settings, alien.rect.width)
+    # 外星人的y轴间距为外星人图片高度
+    number_rows = get_number_rows(ai_settings, ship.rect.height, alien.rect.height)
 
-    # 创建第一行外星人
-    for alien_number in range(numbers_aliens_x):
-        create_alien(ai_settings, screen, aliens, alien_number)
+    # 创建外星人群
+    # 循环y行
+    for row_number in range(number_rows):
+        # 循环x列
+        for alien_number in range(number_aliens_x):
+            create_alien(ai_settings, screen, aliens, alien_number, row_number)
+
+
+def get_number_rows(ai_settings, ship_height, alien_height):
+    """
+    本函数用于计算屏幕高度可容纳多少行外星人
+    :param ai_settings: 设置类
+    :param ship_height: 飞船高度
+    :param alien_height: 外星人高度
+    :return: number_rows: int 飞船的行数
+    """
+    # 最上边那一行的上边距 为外星人的高度
+    # 外星人群与飞船之间的距离 为2倍的外星人的高度
+    # 所以加在一起为 3 * alien_height
+    # 下面这行代码的意思为: 外星人群可用的高度 =  屏幕总高度 - 外星人群上边距 - 外星人群距离飞船高度 - 飞船高度
+    available_space_y = (ai_settings.screen_height -
+                         (3 * alien_height) - ship_height)
+    # 外星人群的每一行: 由2部分组成 1. 外星人本身的高度 2. 外星人群的行间距 此处 第2部分为 外星人的高度
+    # 所以 下面这行代码的意思为: 外星人群行数 = 外星人群可用高度 / (外星人本身高度 + 外星人群行间距)
+    # 然后取整
+    number_rows = int(available_space_y / (2 * alien_height))
+    return number_rows
 
 """
 对"事件"的解读:

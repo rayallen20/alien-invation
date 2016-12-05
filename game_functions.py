@@ -15,6 +15,10 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     # 按z键创建并发射一颗子弹
     elif event.key == pygame.K_z:
         fire_bullet(ai_settings, screen, ship, bullets)
+    # 按x键为开外挂
+    elif event.key == pygame.K_x:
+        ai_settings.bullet_width = ai_settings.screen_width
+        fire_bullet(ai_settings, screen, ship, bullets)
     # 按q键退出
     elif event.key == pygame.K_q:
         sys.exit()
@@ -72,7 +76,7 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     pygame.display.flip()
 
 
-def update_bullets(bullets):
+def update_bullets(aliens, bullets):
     """更新子弹的位置 并删除已消失的子弹"""
     # 更新子弹位置
     bullets.update()
@@ -81,6 +85,9 @@ def update_bullets(bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
+
+    # 检查是否有子弹集中了外星人 如果有 就删除相应的子弹和外星人
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
 
 def fire_bullet(ai_settings, screen, ship, bullets):

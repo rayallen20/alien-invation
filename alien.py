@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 
 class Alien(Sprite):
     """单个外星人类"""
-    def __init__(self,ai_settings, screen):
+    def __init__(self, ai_settings, screen):
         super().__init__()
         self.screen = screen
         self.ai_settings = ai_settings
@@ -24,9 +24,22 @@ class Alien(Sprite):
         """在指定的位置绘制外星人"""
         self.screen.blit(self.image, self.rect)
 
+    def check_edges(self):
+        """
+        如果外星人位于屏幕边缘 就返回True
+        两种情况为"位于屏幕边缘":1.距右侧距离大于屏幕右侧距离 2.距左侧距离小于屏幕左侧距离
+        :return:
+        """
+        screen_rect = self.screen.get_rect()
+        if self.rect.right >= screen_rect.right:
+            return True
+        elif self.rect.left <= 0:
+            return True
+
     def update(self):
         """向右移动外星人"""
-        self.x += self.ai_settings.alien_speed_factor
+        self.x += (self.ai_settings.alien_speed_factor *
+                   self.ai_settings.fleet_direction)
         self.rect.x = self.x
 """
 解释:

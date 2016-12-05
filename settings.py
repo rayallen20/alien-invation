@@ -19,5 +19,9 @@ class Settings:
         # 此处 我做过测试 手速最快也只能同屏幕有5颗子弹 所以设置为10颗应该是看不出来的
         self.bullet_allowed = 50
 
-        # 存储外星人的移动速度
+        # 存储外星人的横向移动速度
         self.alien_speed_factor = 0.75
+        # 外星人群向下移动的速度
+        self.fleet_drop_speed = 7.5
+        # fleet_direction: 1表示右移 -1表示左移
+        self.fleet_direction = 1

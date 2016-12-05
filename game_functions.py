@@ -229,3 +229,9 @@ bullets 即 主循环中 子弹类的编组 这个编组 可以当做一个list�
 """
 aliens.draw(screen): Group.draw() 绘制编组中的每个元素 元素的位置由rect属性决定
 """
+
+"""
+pygame.sprite.groupcollide(GroupA, GroupB, 是否杀死A, 是否杀死B)
+sprite.groupcollide()方法:将GroupA和GroupB的每个元素的rect进行对比 并返回一个dict 其中包含发生碰撞的元素
+第三 四 两个参数 设置为是否删除掉这两个发生碰撞的元素
+"""

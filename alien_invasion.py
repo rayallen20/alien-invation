@@ -37,7 +37,7 @@ def run_game():
 
         # 同ship.update() 主循环中调用update方法 更新位置 但是 这是对所有Bullet对象都生效的
         # 当子弹超过屏幕上方时 删除这个surface
-        gf.update_bullets(aliens, bullets)
+        gf.update_bullets(ai_settings, screen, ship, aliens, bullets)
         # print(len(bullets))
 
         # 更新子弹位置

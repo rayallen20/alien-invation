@@ -10,9 +10,17 @@ class Settings:
         self.ship_speed_factor = 0.5
 
         # 子弹的相关设置
+
+        # 子弹速度
         self.bullet_speed_factor = 1
+
+        # 子弹宽度
         self.bullet_width = 3
+
+        # 子弹高度
         self.bullet_height = 15
+
+        # 子弹颜色
         self.bullet_color = (60, 60, 60)
 
         # 允许出现在屏幕中的子弹数量

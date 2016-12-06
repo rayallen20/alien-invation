@@ -41,7 +41,7 @@ def run_game():
         # print(len(bullets))
 
         # 更新子弹位置
-        gf.update_aliens(ai_settings, aliens)
+        gf.update_aliens(ai_settings, ship, aliens)
 
         # 此处 重构理由同上
         gf.update_screen(ai_settings, screen, ship, aliens, bullets)

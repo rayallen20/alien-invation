@@ -207,10 +207,14 @@ def change_fleet_direction(ai_settings, aliens):
     ai_settings.fleet_direction *= -1
 
 
-def update_aliens(ai_settings, aliens):
-    """检查是否有外星人位于屏幕边缘 并更新外星人的位置"""
+def update_aliens(ai_settings, ship, aliens):
+    """检查是否有外星人位于屏幕边缘 并更新外星人的位置 检查是否有外星人碰撞到了飞船"""
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
+
+    # 检测外星人和飞船之间的碰撞
+    if pygame.sprite.spritecollideany(ship, aliens):
+        print('Ship hit!!!')
 
 """
 对"事件"的解读:
@@ -245,4 +249,11 @@ aliens.draw(screen): Group.draw() 绘制编组中的每个元素 元素的位置
 pygame.sprite.groupcollide(GroupA, GroupB, 是否杀死A, 是否杀死B)
 sprite.groupcollide()方法:将GroupA和GroupB的每个元素的rect进行对比 并返回一个dict 其中包含发生碰撞的元素
 第三 四 两个参数 设置为是否删除掉这两个发生碰撞的元素
+"""
+
+"""
+pygame.sprite.spritecollideany(Sprite,Group):这个方法检测编组(多个)中是否有成员与精灵(单个)发生碰撞
+并在找到和精灵发生了碰撞的成员后就停止遍历编组 返回第一个与精灵发生碰撞的编组中的成员
+如果没有发生碰撞 pygame.sprite.spritecollideany()方法会返回 None 因此 update_aliens()方法中的
+if pygame.sprite.spritecollideany() 中的代码 是不会被执行的
 """

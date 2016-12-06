@@ -6,30 +6,32 @@ class Settings:
         self.screen_height = 600
         self.bg_color = (230, 230, 230)
 
+        # 飞船相关设置
+
         # 飞船移动速度
         self.ship_speed_factor = 0.5
+        # 可用飞船数量 说白了就是几条命
+        self.ship_limit = 3
 
         # 子弹的相关设置
 
         # 子弹速度
         self.bullet_speed_factor = 1
-
         # 子弹宽度
         self.bullet_width = 3
-
         # 子弹高度
         self.bullet_height = 15
-
         # 子弹颜色
         self.bullet_color = (60, 60, 60)
-
         # 允许出现在屏幕中的子弹数量
         # 此处 我做过测试 手速最快也只能同屏幕有5颗子弹 所以设置为10颗应该是看不出来的
         self.bullet_allowed = 50
 
-        # 存储外星人的横向移动速度
+        # 外星人相关设置
+
+        # 外星人的横向移动速度
         self.alien_speed_factor = 0.75
         # 外星人群向下移动的速度
-        self.fleet_drop_speed = 7.5
+        self.fleet_drop_speed = 75
         # fleet_direction: 1表示右移 -1表示左移
         self.fleet_direction = 1

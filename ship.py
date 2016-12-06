@@ -43,6 +43,10 @@ class Ship:
         """在指定位置绘制飞船"""
         self.screen.blit(self.image, self.rect)
 
+    def center_ship(self):
+        """设定飞船在屏幕上的位置为底部居中"""
+        self.center = self.screen_rect.centerx
+
 """
 解释:
 __init__()中的screen: 即self,screen 指定了将飞船绘制到什么地方

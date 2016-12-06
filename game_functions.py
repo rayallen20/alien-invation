@@ -1,5 +1,6 @@
 # 本模块用于处理让游戏运行起来的方法 目的在于避免主循环中的代码太长
 import sys
+from time import sleep
 import pygame
 from bullet import Bullet
 from alien import Alien
@@ -98,7 +99,6 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
         # 删除目前屏幕上的子弹 以免刚生成一批新的外星人 就有外星人中弹了
         bullets.empty()
         create_fleet(ai_settings, screen, ship, aliens)
-
 
 
 def fire_bullet(ai_settings, screen, ship, bullets):
@@ -207,14 +207,49 @@ def change_fleet_direction(ai_settings, aliens):
     ai_settings.fleet_direction *= -1
 
 
-def update_aliens(ai_settings, ship, aliens):
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+    """
+    响应被外星人撞到的飞船
+    当有外星人撞到飞船时调用本函数
+    本函数要做如下几件事:
+    1. 将可用飞船数量 -1
+    2. 清空子弹和外星人list
+    3. 创建一群外星人
+    4. 将新的飞船放置在底部中央
+    5. 暂停一会儿 以便玩家反应过来是新的一轮游戏了
+    :param ai_settings: 设置类
+    :param stats: 统计当前信息类
+    :param screen: 屏幕surface
+    :param ship: 飞船surface
+    :param aliens: 外星人Group
+    :param bullets: 子弹Group
+    :return:
+    """
+    # 飞船数量-1
+    stats.ships_left -= 1
+
+    # 清空子弹Group 和 外星人Group
+    bullets.empty()
+    aliens.empty()
+
+    # 创建一群新的外星人
+    create_fleet(ai_settings, screen, ship, aliens)
+
+    # 将新的飞船放在屏幕底部中央位置
+    ship.center_ship()
+
+    # 暂停1.5秒 让玩家反应过来这是新游戏
+    sleep(1.5)
+
+
+def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     """检查是否有外星人位于屏幕边缘 并更新外星人的位置 检查是否有外星人碰撞到了飞船"""
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
 
     # 检测外星人和飞船之间的碰撞
     if pygame.sprite.spritecollideany(ship, aliens):
-        print('Ship hit!!!')
+        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
 
 """
 对"事件"的解读:

@@ -20,6 +20,7 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_x:
         ai_settings.bullet_width = ai_settings.screen_width
         fire_bullet(ai_settings, screen, ship, bullets)
+        ai_settings.bullet_width = 3
     # 按q键退出
     elif event.key == pygame.K_q:
         sys.exit()
@@ -242,6 +243,16 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     sleep(1.5)
 
 
+def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+    """检查是否有外星人到达了屏幕底端 如果有 调用ship_hit 即和飞船被外星人撞到了的情况 做同样的处理"""
+    screen_rect = screen.get_rect()
+    for alien in aliens:
+        if alien.rect.bottom >= screen_rect.bottom:
+            # 调用 ship_hit 和飞船被撞 做同样的处理
+            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            break
+
+
 def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     """检查是否有外星人位于屏幕边缘 并更新外星人的位置 检查是否有外星人碰撞到了飞船"""
     check_fleet_edges(ai_settings, aliens)
@@ -250,6 +261,9 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     # 检测外星人和飞船之间的碰撞
     if pygame.sprite.spritecollideany(ship, aliens):
         ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+
+    # 检测是否有外星人到达屏幕底端 如果有 做处理
+    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
 
 """
 对"事件"的解读:

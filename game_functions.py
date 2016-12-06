@@ -226,21 +226,24 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     :param bullets: 子弹Group
     :return:
     """
-    # 飞船数量-1
-    stats.ships_left -= 1
+    if stats.ships_left > 0:
+        # 飞船数量-1
+        stats.ships_left -= 1
 
-    # 清空子弹Group 和 外星人Group
-    bullets.empty()
-    aliens.empty()
+        # 清空子弹Group 和 外星人Group
+        bullets.empty()
+        aliens.empty()
 
-    # 创建一群新的外星人
-    create_fleet(ai_settings, screen, ship, aliens)
+        # 创建一群新的外星人
+        create_fleet(ai_settings, screen, ship, aliens)
 
-    # 将新的飞船放在屏幕底部中央位置
-    ship.center_ship()
+        # 将新的飞船放在屏幕底部中央位置
+        ship.center_ship()
 
-    # 暂停1.5秒 让玩家反应过来这是新游戏
-    sleep(1.5)
+        # 暂停1.5秒 让玩家反应过来这是新游戏
+        sleep(1.5)
+    else:
+        stats.game_active = False
 
 
 def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):

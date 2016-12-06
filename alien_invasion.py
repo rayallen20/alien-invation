@@ -36,16 +36,17 @@ def run_game():
         # 因此 不再需要在这个文件中import sys 因为只在game_functions中使用了这个模块 本文件中没有使用
         gf.check_events(ai_settings, screen, ship, bullets)
 
-        # 在主循环中调用ship对象的update方法 只有在这个位置上调用update() 才能保证按住→飞船能一直移动
-        ship.update()
+        if stats.game_active:
+            # 在主循环中调用ship对象的update方法 只有在这个位置上调用update() 才能保证按住→飞船能一直移动
+            ship.update()
 
-        # 同ship.update() 主循环中调用update方法 更新位置 但是 这是对所有Bullet对象都生效的
-        # 当子弹超过屏幕上方时 删除这个surface
-        gf.update_bullets(ai_settings, screen, ship, aliens, bullets)
-        # print(len(bullets))
+            # 同ship.update() 主循环中调用update方法 更新位置 但是 这是对所有Bullet对象都生效的
+            # 当子弹超过屏幕上方时 删除这个surface
+            gf.update_bullets(ai_settings, screen, ship, aliens, bullets)
+            # print(len(bullets))
 
-        # 更新子弹位置
-        gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
+            # 更新子弹位置
+            gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
 
         # 此处 重构理由同上
         gf.update_screen(ai_settings, screen, ship, aliens, bullets)

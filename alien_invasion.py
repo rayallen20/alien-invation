@@ -41,7 +41,7 @@ def run_game():
 
         # 此处 为避免主循环太过冗长 将有关监听事件的方法 都放在了game_functions这个模块中
         # 因此 不再需要在这个文件中import sys 因为只在game_functions中使用了这个模块 本文件中没有使用
-        gf.check_events(ai_settings, screen, ship, bullets)
+        gf.check_events(ai_settings, screen, stats, play_button, ship, bullets)
 
         if stats.game_active:
             # 在主循环中调用ship对象的update方法 只有在这个位置上调用update() 才能保证按住→飞船能一直移动

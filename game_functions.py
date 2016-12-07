@@ -33,10 +33,12 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ai_settings, screen, ship, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, bullets):
     """
     :param ai_settings 设置类
     :param screen 屏幕surface
+    :param stats 统计信息类的对象
+    :param play_button 按钮类的对象
     :param ship: 飞船对象
     :param bullets: 子弹类的Group
     检查事件是否为退出
@@ -54,12 +56,24 @@ def check_events(ai_settings, screen, ship, bullets):
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
 
+        # 捕获鼠标单击的位置 并检查这个位置是否在按钮的内部 如果在 则激活游戏
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(stats, play_button, mouse_x, mouse_y)
+
+
+def check_play_button(stats, play_button, mouse_x, mouse_y):
+    """在玩家点击Play按钮时 开始新游戏"""
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        stats.game_active = True
+
 
 def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
     """
     主循环时 重绘 刷新屏幕
     :param ai_settings: 设置类的对象
     :param screen: pygame.display.set_mode 屏幕
+    :param stats: 信息统计类的对象
     :param ship: 飞船类的实例化对象
     :param aliens: 外星人Group
     :param bullets: 子弹类的Group
@@ -312,4 +326,13 @@ pygame.sprite.spritecollideany(Sprite,Group):这个方法检测编组(多个)中
 并在找到和精灵发生了碰撞的成员后就停止遍历编组 返回第一个与精灵发生碰撞的编组中的成员
 如果没有发生碰撞 pygame.sprite.spritecollideany()方法会返回 None 因此 update_aliens()方法中的
 if pygame.sprite.spritecollideany() 中的代码 是不会被执行的
+"""
+
+"""
+play_button.rect.collidepoint(mouse_x, mouse_y):play_button.rect为按钮的surface对象
+collidepoint(鼠标x坐标,鼠标y坐标) 检测鼠标单击的位置是否在surface对象内 是返回True 否返回False
+"""
+
+"""
+pygame.mouse.get_pos() 返回一个元组 获取鼠标的x和y坐标 此处 a, b = (c, d) 使用函数的多返回值
 """

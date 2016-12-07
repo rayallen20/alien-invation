@@ -55,7 +55,7 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, aliens, bullets):
+def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
     """
     主循环时 重绘 刷新屏幕
     :param ai_settings: 设置类的对象
@@ -73,6 +73,10 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     # 在飞船和外星人后边重绘所有子弹
     for bullet in bullets.sprites():
         bullet.draw_bullet()
+
+    # 如果游戏处于非活动状态 就绘制Play按钮
+    if not stats.game_active:
+        play_button.draw_button()
 
     # 刷新屏幕
     pygame.display.flip()

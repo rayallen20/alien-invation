@@ -33,13 +33,14 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ai_settings, screen, stats, play_button, ship, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
     """
     :param ai_settings 设置类
     :param screen 屏幕surface
     :param stats 统计信息类的对象
     :param play_button 按钮类的对象
     :param ship: 飞船对象
+    :param aliens: 飞船类的Group
     :param bullets: 子弹类的Group
     检查事件是否为退出
     :return:
@@ -59,13 +60,24 @@ def check_events(ai_settings, screen, stats, play_button, ship, bullets):
         # 捕获鼠标单击的位置 并检查这个位置是否在按钮的内部 如果在 则激活游戏
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(stats, play_button, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
 
 
-def check_play_button(stats, play_button, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """在玩家点击Play按钮时 开始新游戏"""
     if play_button.rect.collidepoint(mouse_x, mouse_y):
+        # 重置游戏统计信息
+        stats.reset_stats()
         stats.game_active = True
+
+        # 清空外星人列表和子弹列表
+        aliens.empty()
+        bullets.empty()
+
+        # 重新创建一群外星人
+        create_fleet(ai_settings, screen, ship, aliens)
+        # 飞船居中
+        ship.center_ship()
 
 
 def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):

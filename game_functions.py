@@ -69,6 +69,8 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
     # 因此 需要在 游戏未被激活 且 Play的区域被点中时 开始游戏
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
+        # 重置游戏设置
+        ai_settings.initialize_dynamic_settings()
         # 隐藏鼠标
         pygame.mouse.set_visible(False)
         # 重置游戏统计信息
@@ -134,6 +136,8 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
     if len(aliens) == 0:
         # 删除目前屏幕上的子弹 以免刚生成一批新的外星人 就有外星人中弹了
         bullets.empty()
+        # 加快游戏节奏
+        ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, aliens)
 
 

@@ -65,7 +65,12 @@ def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets)
 
 def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """在玩家点击Play按钮时 开始新游戏"""
-    if play_button.rect.collidepoint(mouse_x, mouse_y):
+    # 此时 有一个问题:点击Play按钮后 游戏开始 Play按钮隐藏 但是如果点击Play按钮所在的那块区域 游戏会再次开始
+    # 因此 需要在 游戏未被激活 且 Play的区域被点中时 开始游戏
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+    if button_clicked and not stats.game_active:
+        # 隐藏鼠标
+        pygame.mouse.set_visible(False)
         # 重置游戏统计信息
         stats.reset_stats()
         stats.game_active = True
@@ -274,6 +279,8 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         sleep(1.5)
     else:
         stats.game_active = False
+        # 如果游戏处于未激活状态 则显示出鼠标来
+        pygame.mouse.set_visible(True)
 
 
 def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):

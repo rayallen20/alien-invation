@@ -59,6 +59,9 @@ class Settings:
         # 方向flag 1表示向右 -1表示向左
         self.fleet_direction = 1
 
+        # 击落每一个外星人的初始得分
+        self.alien_points = 50
+
     def increase_speed(self):
         """提高速度设置 此处的提高速度 是指 将飞船移速 子弹移速 外星人移速 同时提高"""
         self.ship_speed_factor *= self.speedup_scale

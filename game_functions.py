@@ -117,7 +117,7 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
     pygame.display.flip()
 
 
-def update_bullets(ai_settings, screen, ship, aliens, bullets):
+def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """更新子弹的位置 并删除已消失的子弹"""
     # 更新子弹位置
     bullets.update()
@@ -127,12 +127,19 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
 
-    check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets)
+    check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
 
-def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
+def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """响应子弹和外星人的碰撞"""
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    # 如果dict collisions 不为空 那么就要给玩家加分
+    # 此处 collisions 是一个dict 该dict的每个值 都是一个list 这个list 包含被同一颗子弹击中的所有外星人 所以 下边的代码 要 * len(aliens)
+    if collisions:
+        for aliens in collisions.values():
+            stats.score += ai_settings.alien_points * len(aliens)
+            sb.prep_score()
 
     # 如果外星人群都被消灭了 那么就再生成一个新的外星人群
     if len(aliens) == 0:

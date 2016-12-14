@@ -87,12 +87,13 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         ship.center_ship()
 
 
-def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
+def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
     """
     主循环时 重绘 刷新屏幕
     :param ai_settings: 设置类的对象
     :param screen: pygame.display.set_mode 屏幕
     :param stats: 信息统计类的对象
+    :param sb: 记分牌对象
     :param ship: 飞船类的实例化对象
     :param aliens: 外星人Group
     :param bullets: 子弹类的Group
@@ -102,6 +103,7 @@ def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button
     screen.fill(ai_settings.bg_color)
     ship.blitme()
     aliens.draw(screen)
+    sb.show_score()
 
     # 在飞船和外星人后边重绘所有子弹
     for bullet in bullets.sprites():

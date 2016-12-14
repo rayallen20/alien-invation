@@ -3,6 +3,7 @@ import pygame
 from pygame.sprite import Group
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
 from ship import Ship
 import game_functions as gf
@@ -22,6 +23,9 @@ def run_game():
 
     # 创建一个用于存储游戏统计信息的实例
     stats = GameStats(ai_settings)
+
+    # 创建记分牌
+    sb = Scoreboard(ai_settings, screen, stats)
 
     # 让游戏一开始处于非活动状态 点击了Play按钮后再开始游戏
     stats.game_active = False
@@ -56,6 +60,6 @@ def run_game():
             gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
 
         # 此处 重构理由同上
-        gf.update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button)
+        gf.update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button)
 
 run_game()

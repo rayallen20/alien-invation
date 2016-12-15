@@ -140,6 +140,7 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
         for aliens in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens)
             sb.prep_score()
+        check_high_score(stats, sb)
 
     # 如果外星人群都被消灭了 那么就再生成一个新的外星人群
     if len(aliens) == 0:
@@ -318,6 +319,12 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     # 检测是否有外星人到达屏幕底端 如果有 做处理
     check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
 
+
+def check_high_score(stats, sb):
+    """检查是否产生了新的最高得分"""
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
 """
 对"事件"的解读:
 每当用户按键或者点击鼠标时 都将在Pygame中注册一个事件

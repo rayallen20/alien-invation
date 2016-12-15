@@ -8,6 +8,9 @@ class GameStats:
         # 游戏刚刚启动时 处于激活状态
         self.game_active = True
 
+        # 最高得分 任何情况下都不应重置 所以写在 __init__里
+        self.high_score = 0
+
     def reset_stats(self):
         """初始化在游戏运行期间可能变化的统计信息"""
         # Q: 为什么ships_left 作为GameStats的一个成员属性 不写在 __init__中呢?

@@ -28,7 +28,12 @@ class Scoreboard:
         将得分转换为渲染的图像
         :return:
         """
-        score_str = str(self.stats.score)
+        # 前边在settings类中设置的分数提升规则为1.5倍 这样就会造成一个现象 分数不整齐
+        # 使用round(num, -1) 将得分转换为10的整数倍 round()方法的第二个参数为-1时 即为将num整齐化到10的整数倍
+        rounded_score = round(self.stats.score, -1)
+
+        # "{:,}".format(num): 在数字中插入,
+        score_str = "{:,}".format(rounded_score)
         self.score_image = self.font.render(score_str, True, self.text_color, self.ai_settings.bg_color)
 
         # 将分数放置在右上角

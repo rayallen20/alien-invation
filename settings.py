@@ -45,6 +45,9 @@ class Settings:
         # 以何种速度加快游戏节奏
         self.speedup_scale = 1.1
 
+        # 击落一个外星人的得分成长速度 即N+1级时每个外星人的分数为N级时的1.5倍
+        self.score_scale = 1.5
+
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
@@ -63,7 +66,9 @@ class Settings:
         self.alien_points = 50
 
     def increase_speed(self):
-        """提高速度设置 此处的提高速度 是指 将飞船移速 子弹移速 外星人移速 同时提高"""
+        """提高速度设置 此处的提高速度 是指 将飞船移速 子弹移速 外星人移速 同时提高 并提高外星人的分值"""
         self.ship_speed_factor *= self.speedup_scale
         self.bullet_speed_factor *= self.speedup_scale
         self.alien_speed_factor *= self.speedup_scale
+        self.alien_points = int(self.alien_points * self.score_scale)
+        # print(self.alien_points)

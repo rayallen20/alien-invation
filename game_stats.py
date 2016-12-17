@@ -22,3 +22,6 @@ class GameStats:
 
         # 初始化得分
         self.score = 0
+
+        # 初始化等级
+        self.level = 1

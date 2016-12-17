@@ -33,11 +33,12 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets):
     """
     :param ai_settings 设置类
     :param screen 屏幕surface
     :param stats 统计信息类的对象
+    :param sb 记分牌对象
     :param play_button 按钮类的对象
     :param ship: 飞船对象
     :param aliens: 飞船类的Group
@@ -60,10 +61,10 @@ def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets)
         # 捕获鼠标单击的位置 并检查这个位置是否在按钮的内部 如果在 则激活游戏
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
+            check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y)
 
 
-def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """在玩家点击Play按钮时 开始新游戏"""
     # 此时 有一个问题:点击Play按钮后 游戏开始 Play按钮隐藏 但是如果点击Play按钮所在的那块区域 游戏会再次开始
     # 因此 需要在 游戏未被激活 且 Play的区域被点中时 开始游戏
@@ -76,6 +77,11 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
         # 重置游戏统计信息
         stats.reset_stats()
         stats.game_active = True
+
+        # 重置记分牌图像
+        sb.prep_score()
+        sb.prep_high_score()
+        sb.prep_level()
 
         # 清空外星人列表和子弹列表
         aliens.empty()
@@ -146,6 +152,9 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
     if len(aliens) == 0:
         # 删除目前屏幕上的子弹 以免刚生成一批新的外星人 就有外星人中弹了
         bullets.empty()
+        # 提高等级
+        stats.level += 1
+        sb.prep_level()
         # 加快游戏节奏
         ai_settings.increase_speed()
         create_fleet(ai_settings, screen, ship, aliens)
